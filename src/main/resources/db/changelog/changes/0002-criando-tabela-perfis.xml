@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- Criando esquema da aplicação -->
+    <changeSet id="2" author="Rafael Teixeira">
+        <createTable tableName="tb_perfis" schemaName="sinta_se_bem">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tx_descricao" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <sql dbms="postgresql" endDelimiter=";">
+            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('d3014683-dc03-4905-ad51-3e4c561f0649', 'CLIENTE');
+            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('da6d737a-13cb-4308-b6c0-08ea581d193c', 'PRESTADOR');
+            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('40d0fa19-5aab-485f-b73a-2e11edd8ffd2', 'ADMINISTRADOR');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- Criando esquema da aplicação -->
+    <changeSet id="4" author="Rafael Teixeira">
+        <createTable schemaName="sinta_se_bem" tableName="tb_enderecos">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tb_enderecos"/>
+            </column>
+            <column name="tx_cep" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_logradouro" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_complemento" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_bairro" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_cidade" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_estado" type="VARCHAR(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_numero" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

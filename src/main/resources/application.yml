@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: sinta-se-bem-app
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+  liquibase:
+    change-log: db/changelog/changelog-master.xml
+#springdoc:
+#  override-with-generic-response: false

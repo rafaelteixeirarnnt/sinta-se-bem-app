@@ -2,8 +2,11 @@ package br.com.leaf.sintasebemapp.infra.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
+
+import java.time.LocalDate;
 
 public record UsuarioRequest(
 
@@ -16,6 +19,10 @@ public record UsuarioRequest(
         @Length(max = 50, message = "O email deve ter no máximo 50 caracteres")
         @Schema(description = "Email do usuário", example = "a@a.com")
         String email,
+
+        @NotNull
+        @Schema(description = "Data de nascimento do usuário", example = "1990-01-01")
+        LocalDate dtNascimento,
 
         @Length(min = 10, max = 10, message = "A senha deve ter 10 caracteres")
         @NotBlank(message = "A senha é obrigatória")

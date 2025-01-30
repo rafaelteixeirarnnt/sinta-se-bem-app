@@ -44,4 +44,9 @@ public class UsuarioRepositoryJpaGateway implements UsuarioRepositoryGateway {
     public Usuario obterUsuarioPorId(UUID id) {
         return this.mapper.toUsuario(this.repository.findById(id).orElseThrow(() -> new UsuarioNegocioValidationException("Usuário não encontrado")));
     }
+
+    @Override
+    public Usuario obterUsuarioPorCPF(String cpf) {
+        return this.mapper.toUsuario(this.repository.findByCpf(cpf).orElseThrow(() -> new UsuarioNegocioValidationException("Usuário não encontrado")));
+    }
 }

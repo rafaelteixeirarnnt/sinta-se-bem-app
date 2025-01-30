@@ -3,11 +3,15 @@ package br.com.leaf.sintasebemapp.application.usecases;
 import br.com.leaf.sintasebemapp.application.exception.NegocioException;
 import br.com.leaf.sintasebemapp.application.exception.UsuarioNegocioValidationException;
 import br.com.leaf.sintasebemapp.domain.enums.EstadosEnum;
+import br.com.leaf.sintasebemapp.domain.models.Endereco;
 import br.com.leaf.sintasebemapp.domain.models.Usuario;
 import br.com.leaf.sintasebemapp.gateway.UsuarioRepositoryGateway;
 import br.com.leaf.sintasebemapp.infra.dto.response.UsuarioResponse;
 
+import java.time.LocalDate;
 import java.util.UUID;
+
+import static java.lang.Character.getNumericValue;
 
 public class UsuarioUseCase {
 
@@ -34,14 +38,37 @@ public class UsuarioUseCase {
             validarSenha(usuario.senha());
             validarTelefonePossuiDezOuOnzeDigitosESeTodosSaoNumeros(usuario);
             validarCPF(usuario.cpf());
-            validarCamposEndereco(usuario);
+            validarCPFJaCadastrado(usuario.cpf());
+            validarCamposEndereco(usuario.endereco());
             validarLogradouro(usuario.endereco().logradouro());
             validarBairro(usuario.endereco().bairro());
             validarCidade(usuario.endereco().cidade());
             validarEstado(usuario.endereco().estado());
             validarCep(usuario.endereco().cep());
+            validarSeUsuarioMaiorDeIdade(usuario.dtNascimento());
         } catch (UsuarioNegocioValidationException e) {
             throw new NegocioException(e.getMessage());
+        }
+    }
+
+    private void validarCPFJaCadastrado(String cpf) {
+        try {
+            var usuario = this.gateway.obterUsuarioPorCPF(cpf);
+            if (usuario != null) {
+                throw new NegocioException("CPF já cadastrado");
+            }
+        } catch (UsuarioNegocioValidationException e) {
+            return;
+        }
+    }
+
+    private void validarSeUsuarioMaiorDeIdade(LocalDate localDate) {
+        if (localDate == null) {
+            throw new UsuarioNegocioValidationException("Data de nascimento é obrigatória");
+        }
+
+        if (localDate.isAfter(LocalDate.now().minusYears(18))) {
+            throw new UsuarioNegocioValidationException("Usuário deve ser maior de idade");
         }
     }
 
@@ -58,8 +85,11 @@ public class UsuarioUseCase {
     }
 
     public void validarSenha(String senha) throws UsuarioNegocioValidationException {
-        if (senha == null || senha.length() != 10) {
-            return;
+        if (senha == null) {
+            throw new UsuarioNegocioValidationException("Senha é obrigatória");
+        }
+        if (senha.length() != 10) {
+            throw new UsuarioNegocioValidationException("Senha deve ter 10 caracteres");
         }
 
         boolean temLetraMinuscula = senha.matches(".*[a-z].*");
@@ -85,17 +115,17 @@ public class UsuarioUseCase {
 
     public void validarCPF(String cpf) {
         if (cpf == null || cpf.length() != 11 || !cpf.matches("\\d{11}")) {
-            return;
+            throw new UsuarioNegocioValidationException("CPF inválido");
         }
 
         if (cpf.chars().distinct().count() == 1) {
-            return;
+            throw new UsuarioNegocioValidationException("CPF inválido");
         }
 
         int soma = 0;
 
         for (int i = 0; i < 9; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
+            soma += getNumericValue(cpf.charAt(i)) * (10 - i);
         }
 
         int primeiroDigito = 11 - (soma % 11);
@@ -103,13 +133,13 @@ public class UsuarioUseCase {
             primeiroDigito = 0;
         }
 
-        if (primeiroDigito != Character.getNumericValue(cpf.charAt(9))) {
-            return;
+        if (primeiroDigito != getNumericValue(cpf.charAt(9))) {
+            throw new UsuarioNegocioValidationException("Primeiro digito verificador inválido");
         }
 
         soma = 0;
         for (int i = 0; i < 10; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
+            soma += getNumericValue(cpf.charAt(i)) * (11 - i);
         }
 
         int segundoDigito = 11 - (soma % 11);
@@ -118,36 +148,54 @@ public class UsuarioUseCase {
             segundoDigito = 0;
         }
 
-        Character.getNumericValue(cpf.charAt(10));
+        int numericValue = getNumericValue(cpf.charAt(10));
+
+        if (numericValue != segundoDigito) {
+            throw new UsuarioNegocioValidationException("Segundo digito verificador inválido");
+        }
     }
 
-    public void validarCamposEndereco(Usuario usuario) {
-        if (!(usuario.endereco().cidade() != null && usuario.endereco().estado() != null && usuario.endereco().bairro() != null &&
-                usuario.endereco().cep() != null && usuario.endereco().logradouro() != null && usuario.endereco().numero() != null &&
-                usuario.endereco().complemento() != null)) {
+    public void validarCamposEndereco(Endereco endereco) {
+        if (endereco == null) {
+            throw new UsuarioNegocioValidationException("Endereço é obrigatório");
+        }
+        if (endereco.cidade() == null && endereco.estado() == null && endereco.bairro() == null &&
+                endereco.cep() == null && endereco.logradouro() == null && endereco.numero() == null) {
             throw new UsuarioNegocioValidationException("Todos os campos do endereço são obrigatórios");
         }
     }
 
     public void validarLogradouro(String logradouro) {
+        if (logradouro == null || logradouro.isBlank()) {
+            throw new UsuarioNegocioValidationException("Logradouro é obrigatório");
+        }
         if (!(logradouro.length() > 2 && logradouro.length() < 100)) {
             throw new UsuarioNegocioValidationException("O logradouro deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
     public void validarBairro(String bairro) {
+        if (bairro == null || bairro.isBlank()) {
+            throw new UsuarioNegocioValidationException("Bairro é obrigatório");
+        }
         if (!(bairro.length() > 2 && bairro.length() < 100)) {
             throw new UsuarioNegocioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
     public void validarCidade(String cidade) {
+        if (cidade == null || cidade.isBlank()) {
+            throw new UsuarioNegocioValidationException("Cidade é obrigatório");
+        }
         if (!(cidade.length() > 2 && cidade.length() < 100)) {
             throw new UsuarioNegocioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
     public void validarEstado(String estado) {
+        if (estado == null || estado.isBlank()) {
+            throw new UsuarioNegocioValidationException("Estado é obrigatório");
+        }
         var temUF = estado.length() == 2;
 
         if (!temUF) {
@@ -158,6 +206,9 @@ public class UsuarioUseCase {
     }
 
     public void validarCep(String cep) {
+        if (cep == null || cep.isBlank()) {
+            throw new UsuarioNegocioValidationException("CEP é obrigatório");
+        }
         if (cep.matches("[0-9]{8}")) {
             return;
         }

@@ -22,7 +22,7 @@ public class UsuarioService {
     public UsuarioResponse salvar(UsuarioRequest request) {
         return usuarioUseCase.salvar(Usuario.toUsuario(null, request.nome(), request.email(), request.senha(), request.cpf(), request.telefone(),
                 request.cidade(), request.estado(), request.bairro(), request.cep(), request.logradouro(), request.numero(), request.complemento(),
-                request.prestadorServico()));
+                request.prestadorServico(), request.dtNascimento()));
     }
 
     public UsuarioRecuperadoResponse obterUsuario(UUID id) {

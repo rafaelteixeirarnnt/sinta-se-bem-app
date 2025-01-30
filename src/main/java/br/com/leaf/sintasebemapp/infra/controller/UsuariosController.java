@@ -1,7 +1,6 @@
 package br.com.leaf.sintasebemapp.infra.controller;
 
 import br.com.leaf.sintasebemapp.infra.dto.request.UsuarioRequest;
-import br.com.leaf.sintasebemapp.infra.dto.response.UsuarioRecuperadoResponse;
 import br.com.leaf.sintasebemapp.infra.dto.response.UsuarioResponse;
 import br.com.leaf.sintasebemapp.infra.exception.ErrorResponse;
 import br.com.leaf.sintasebemapp.infra.services.UsuarioService;
@@ -11,15 +10,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/usuarios")
@@ -31,7 +27,9 @@ public class UsuariosController {
         this.usuarioService = usuarioService;
     }
 
-    @Operation(summary = "Cadastra um novo usuário",
+    @Operation(
+            tags = "1 - Cadastro de Usuários",
+            summary = "Cadastra um novo usuário",
             description = "Cadastra um novo usuário com seus dados pessoais e endereço",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),

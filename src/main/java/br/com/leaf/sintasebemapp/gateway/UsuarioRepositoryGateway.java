@@ -9,4 +9,6 @@ public interface UsuarioRepositoryGateway {
     Usuario salvar(Usuario usuario);
 
     Usuario obterUsuarioPorId(UUID id);
+
+    Usuario obterUsuarioPorCPF(String cpf);
 }

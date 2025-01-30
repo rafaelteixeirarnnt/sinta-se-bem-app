@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- Criando esquema da aplicação -->
+    <changeSet id="5" author="Rafael Teixeira">
+        <addForeignKeyConstraint baseTableSchemaName="sinta_se_bem"
+                                 referencedTableSchemaName="sinta_se_bem" baseTableName="tb_usuarios"
+                                 baseColumnNames="id_perfil" constraintName="FK_TB_USUARIOS_ON_PERFIL"
+                                 referencedTableName="tb_perfis" referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableSchemaName="sinta_se_bem"
+                                 referencedTableSchemaName="sinta_se_bem"
+                                 baseTableName="tb_usuarios" baseColumnNames="id_endereco"
+                                 constraintName="FK_TB_USUARIOS_ON_ENDERECO" referencedTableName="tb_enderecos"
+                                 referencedColumnNames="id" />
+    </changeSet>
+
+</databaseChangeLog>

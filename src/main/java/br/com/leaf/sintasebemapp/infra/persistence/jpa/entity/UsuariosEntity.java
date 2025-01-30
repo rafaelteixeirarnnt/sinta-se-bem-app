@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -31,6 +32,12 @@ public class UsuariosEntity {
 
     @Column(name = "TX_NOME", nullable = false, length = 50)
     private String nome;
+
+    @Column(name = "TX_CPF", nullable = false, length = 11, unique = true)
+    private String cpf;
+
+    @Column(name = "DT_NASCIMENTO", nullable = false)
+    private LocalDate dtNascimento;
 
     @Column(name = "TX_EMAIL", nullable = false, length = 50, unique = true)
     private String email;

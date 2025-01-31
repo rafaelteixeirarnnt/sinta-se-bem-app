@@ -1,6 +1,6 @@
 package br.com.leaf.sintasebemapp.infra.persistence.jpa.gateway;
 
-import br.com.leaf.sintasebemapp.application.exception.UsuarioNegocioValidationException;
+import br.com.leaf.sintasebemapp.application.exception.UsuarioValidationException;
 import br.com.leaf.sintasebemapp.domain.models.Usuario;
 import br.com.leaf.sintasebemapp.gateway.UsuarioRepositoryGateway;
 import br.com.leaf.sintasebemapp.infra.mapper.UsuarioMapper;
@@ -42,11 +42,11 @@ public class UsuarioRepositoryJpaGateway implements UsuarioRepositoryGateway {
 
     @Override
     public Usuario obterUsuarioPorId(UUID id) {
-        return this.mapper.toUsuario(this.repository.findById(id).orElseThrow(() -> new UsuarioNegocioValidationException("Usuário não encontrado")));
+        return this.mapper.toUsuario(this.repository.findById(id).orElseThrow(() -> new UsuarioValidationException("Usuário não encontrado")));
     }
 
     @Override
     public Usuario obterUsuarioPorCPF(String cpf) {
-        return this.mapper.toUsuario(this.repository.findByCpf(cpf).orElseThrow(() -> new UsuarioNegocioValidationException("Usuário não encontrado")));
+        return this.mapper.toUsuario(this.repository.findByCpf(cpf).orElseThrow(() -> new UsuarioValidationException("Usuário não encontrado")));
     }
 }

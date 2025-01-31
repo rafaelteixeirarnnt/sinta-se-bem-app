@@ -16,8 +16,8 @@ public record Usuario(UUID id,
                       PerfilEnum perfilEnum, LocalDate dtNascimento) {
 
     public static Usuario toUsuario(UUID id, String nome, String email, String senha, String cpf, String telefone, String cidade,
-                   String estado, String bairro, String cep, String logradouro, String numero, String complemento,
-                   Boolean prestadorServico, LocalDate dtNascimento) {
+                                    String estado, String bairro, String cep, String logradouro, String numero, String complemento,
+                                    Boolean prestadorServico, LocalDate dtNascimento) {
         return new Usuario(id, nome, email, senha, cpf, telefone,
                 new Endereco(cidade, estado, bairro, cep, logradouro, numero, complemento),
                 prestadorServico,

@@ -34,7 +34,6 @@ public class UsuarioUseCaseTest {
     @Mock
     private UsuarioRepositoryGateway gateway;
 
-
     private final UsuarioMapper usuarioMapper = getMapper(UsuarioMapper.class);
 
     private Usuario usuario;

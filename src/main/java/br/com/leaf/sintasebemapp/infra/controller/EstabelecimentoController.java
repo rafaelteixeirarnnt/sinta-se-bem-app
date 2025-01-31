@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/estabelecimentos")
@@ -27,14 +29,17 @@ public class EstabelecimentoController {
             summary = "Cadastra um novo estabelecimento",
             description = "Cadastra um novo estabelecimento com seus dados",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Estabelecimento cadastrado com sucesso"),
+                    @ApiResponse(responseCode = "201", description = "Estabelecimento cadastrado com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Erro de validação",
                             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
             })
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> salvar(@Valid @RequestBody EstabelecimentoRequest request) {
-        this.service.salvar(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseEntity> salvar(@Valid @RequestBody EstabelecimentoRequest request) {
+        var response = this.service.salvar(request);
+
+        var location = URI.create(String.format("/v1/estabelecimentos/%s", response.id()));
+
+        return ResponseEntity.created(location).build();
     }
 
 }

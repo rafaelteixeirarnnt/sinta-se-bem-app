@@ -1,7 +1,7 @@
 package br.com.leaf.sintasebemapp.application.usecases;
 
 import br.com.leaf.sintasebemapp.application.exception.NegocioException;
-import br.com.leaf.sintasebemapp.application.exception.UsuarioNegocioValidationException;
+import br.com.leaf.sintasebemapp.application.exception.UsuarioValidationException;
 import br.com.leaf.sintasebemapp.domain.enums.EstadosEnum;
 import br.com.leaf.sintasebemapp.domain.models.Endereco;
 import br.com.leaf.sintasebemapp.domain.models.Usuario;
@@ -26,12 +26,12 @@ public class UsuarioUseCase {
             this.validarCamposUsuario(usuario);
             var usuarioSalvo = gateway.salvar(usuario);
             return UsuarioResponse.toUsuarioResponse(usuarioSalvo.id());
-        } catch (UsuarioNegocioValidationException e) {
+        } catch (UsuarioValidationException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
-    public void validarCamposUsuario(Usuario usuario) {
+    private void validarCamposUsuario(Usuario usuario) {
         try {
             validarNome(usuario);
             validarSeEmailEhValido(usuario);
@@ -46,7 +46,7 @@ public class UsuarioUseCase {
             validarEstado(usuario.endereco().estado());
             validarCep(usuario.endereco().cep());
             validarSeUsuarioMaiorDeIdade(usuario.dtNascimento());
-        } catch (UsuarioNegocioValidationException e) {
+        } catch (UsuarioValidationException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -57,39 +57,39 @@ public class UsuarioUseCase {
             if (usuario != null) {
                 throw new NegocioException("CPF já cadastrado");
             }
-        } catch (UsuarioNegocioValidationException e) {
+        } catch (UsuarioValidationException e) {
             return;
         }
     }
 
     private void validarSeUsuarioMaiorDeIdade(LocalDate localDate) {
         if (localDate == null) {
-            throw new UsuarioNegocioValidationException("Data de nascimento é obrigatória");
+            throw new UsuarioValidationException("Data de nascimento é obrigatória");
         }
 
         if (localDate.isAfter(LocalDate.now().minusYears(18))) {
-            throw new UsuarioNegocioValidationException("Usuário deve ser maior de idade");
+            throw new UsuarioValidationException("Usuário deve ser maior de idade");
         }
     }
 
-    public void validarNome(Usuario usuario) throws UsuarioNegocioValidationException {
+    private void validarNome(Usuario usuario) throws UsuarioValidationException {
         if (usuario.nome().length() < 2) {
-            throw new UsuarioNegocioValidationException("Nome deve ter no mínimo 2 caracteres");
+            throw new UsuarioValidationException("Nome deve ter no mínimo 2 caracteres");
         }
     }
 
-    public void validarSeEmailEhValido(Usuario usuario) throws UsuarioNegocioValidationException {
+    private void validarSeEmailEhValido(Usuario usuario) throws UsuarioValidationException {
         if (!usuario.email().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            throw new UsuarioNegocioValidationException("Email inválido");
+            throw new UsuarioValidationException("Email inválido");
         }
     }
 
-    public void validarSenha(String senha) throws UsuarioNegocioValidationException {
+    private void validarSenha(String senha) throws UsuarioValidationException {
         if (senha == null) {
-            throw new UsuarioNegocioValidationException("Senha é obrigatória");
+            throw new UsuarioValidationException("Senha é obrigatória");
         }
         if (senha.length() != 10) {
-            throw new UsuarioNegocioValidationException("Senha deve ter 10 caracteres");
+            throw new UsuarioValidationException("Senha deve ter 10 caracteres");
         }
 
         boolean temLetraMinuscula = senha.matches(".*[a-z].*");
@@ -98,28 +98,27 @@ public class UsuarioUseCase {
         boolean temCaractereEspecial = senha.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
 
         if (!temLetraMinuscula || !temLetraMaiuscula || !temNumero || !temCaractereEspecial) {
-            throw new UsuarioNegocioValidationException("Senha inválida");
+            throw new UsuarioValidationException("Senha inválida");
         }
     }
 
-    public void validarTelefonePossuiDezOuOnzeDigitosESeTodosSaoNumeros(Usuario usuario) throws UsuarioNegocioValidationException {
+    private void validarTelefonePossuiDezOuOnzeDigitosESeTodosSaoNumeros(Usuario usuario) throws UsuarioValidationException {
         if (usuario.telefone().length() < 10 || usuario.telefone().length() > 11) {
-            throw new UsuarioNegocioValidationException("Telefone deve ter 10 ou 11 dígitos");
+            throw new UsuarioValidationException("Telefone deve ter 10 ou 11 dígitos");
         }
 
         if (!usuario.telefone().matches("[0-9]+")) {
-            throw new UsuarioNegocioValidationException("Telefone deve conter apenas números");
+            throw new UsuarioValidationException("Telefone deve conter apenas números");
         }
-
     }
 
-    public void validarCPF(String cpf) {
+    private void validarCPF(String cpf) {
         if (cpf == null || cpf.length() != 11 || !cpf.matches("\\d{11}")) {
-            throw new UsuarioNegocioValidationException("CPF inválido");
+            throw new UsuarioValidationException("CPF inválido");
         }
 
         if (cpf.chars().distinct().count() == 1) {
-            throw new UsuarioNegocioValidationException("CPF inválido");
+            throw new UsuarioValidationException("CPF inválido");
         }
 
         int soma = 0;
@@ -134,7 +133,7 @@ public class UsuarioUseCase {
         }
 
         if (primeiroDigito != getNumericValue(cpf.charAt(9))) {
-            throw new UsuarioNegocioValidationException("Primeiro digito verificador inválido");
+            throw new UsuarioValidationException("Primeiro digito verificador inválido");
         }
 
         soma = 0;
@@ -151,68 +150,68 @@ public class UsuarioUseCase {
         int numericValue = getNumericValue(cpf.charAt(10));
 
         if (numericValue != segundoDigito) {
-            throw new UsuarioNegocioValidationException("Segundo digito verificador inválido");
+            throw new UsuarioValidationException("Segundo digito verificador inválido");
         }
     }
 
-    public void validarCamposEndereco(Endereco endereco) {
+    private void validarCamposEndereco(Endereco endereco) {
         if (endereco == null) {
-            throw new UsuarioNegocioValidationException("Endereço é obrigatório");
+            throw new UsuarioValidationException("Endereço é obrigatório");
         }
         if (endereco.cidade() == null && endereco.estado() == null && endereco.bairro() == null &&
                 endereco.cep() == null && endereco.logradouro() == null && endereco.numero() == null) {
-            throw new UsuarioNegocioValidationException("Todos os campos do endereço são obrigatórios");
+            throw new UsuarioValidationException("Todos os campos do endereço são obrigatórios");
         }
     }
 
-    public void validarLogradouro(String logradouro) {
+    private void validarLogradouro(String logradouro) {
         if (logradouro == null || logradouro.isBlank()) {
-            throw new UsuarioNegocioValidationException("Logradouro é obrigatório");
+            throw new UsuarioValidationException("Logradouro é obrigatório");
         }
         if (!(logradouro.length() > 2 && logradouro.length() < 100)) {
-            throw new UsuarioNegocioValidationException("O logradouro deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
+            throw new UsuarioValidationException("O logradouro deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
-    public void validarBairro(String bairro) {
+    private void validarBairro(String bairro) {
         if (bairro == null || bairro.isBlank()) {
-            throw new UsuarioNegocioValidationException("Bairro é obrigatório");
+            throw new UsuarioValidationException("Bairro é obrigatório");
         }
         if (!(bairro.length() > 2 && bairro.length() < 100)) {
-            throw new UsuarioNegocioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
+            throw new UsuarioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
-    public void validarCidade(String cidade) {
+    private void validarCidade(String cidade) {
         if (cidade == null || cidade.isBlank()) {
-            throw new UsuarioNegocioValidationException("Cidade é obrigatório");
+            throw new UsuarioValidationException("Cidade é obrigatório");
         }
         if (!(cidade.length() > 2 && cidade.length() < 100)) {
-            throw new UsuarioNegocioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
+            throw new UsuarioValidationException("A cidade deve ter no mínimo 2 caracteres e no máximo 100 caracteres");
         }
     }
 
-    public void validarEstado(String estado) {
+    private void validarEstado(String estado) {
         if (estado == null || estado.isBlank()) {
-            throw new UsuarioNegocioValidationException("Estado é obrigatório");
+            throw new UsuarioValidationException("Estado é obrigatório");
         }
         var temUF = estado.length() == 2;
 
         if (!temUF) {
-            throw new UsuarioNegocioValidationException("UF inválida");
+            throw new UsuarioValidationException("UF inválida");
         }
 
         EstadosEnum.getBySigla(estado);
     }
 
-    public void validarCep(String cep) {
+    private void validarCep(String cep) {
         if (cep == null || cep.isBlank()) {
-            throw new UsuarioNegocioValidationException("CEP é obrigatório");
+            throw new UsuarioValidationException("CEP é obrigatório");
         }
         if (cep.matches("[0-9]{8}")) {
             return;
         }
-        throw new UsuarioNegocioValidationException("CEP inválido");
+        throw new UsuarioValidationException("CEP inválido");
     }
 
     public Usuario obterUsuarioPorId(UUID id) {

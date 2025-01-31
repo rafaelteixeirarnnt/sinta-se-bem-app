@@ -1,0 +1,42 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!-- Criando Tabela de Estabelecimentos -->
+    <changeSet id="6" author="Rafael Teixeira">
+        <createTable schemaName="sinta_se_bem" tableName="tb_estabelecimentos">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tb_estabelecimento"/>
+            </column>
+            <column name="tx_nome" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_cnpj" type="VARCHAR(14)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="tx_email" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_telefone" type="VARCHAR(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tx_whatsapp" type="VARCHAR(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hr_inicio_atend" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hr_fim_atend" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID_ENDERECO" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID_RESPONSAVEL" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

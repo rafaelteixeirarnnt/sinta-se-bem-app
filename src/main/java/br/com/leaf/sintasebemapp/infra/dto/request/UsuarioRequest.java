@@ -1,6 +1,7 @@
 package br.com.leaf.sintasebemapp.infra.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -15,6 +16,7 @@ public record UsuarioRequest(
         @Schema(description = "Nome do usuário", example = "João da Silva")
         String nome,
 
+        @Email
         @NotBlank(message = "O email é obrigatório")
         @Length(max = 50, message = "O email deve ter no máximo 50 caracteres")
         @Schema(description = "Email do usuário", example = "a@a.com")

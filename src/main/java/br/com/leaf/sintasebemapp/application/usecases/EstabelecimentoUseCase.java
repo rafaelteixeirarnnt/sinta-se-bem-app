@@ -20,7 +20,6 @@ public class EstabelecimentoUseCase {
     }
 
     public EstabelecimentoResponse salvar(Estabelecimento estabelecimento) {
-
         this.validarEstabelecimento(estabelecimento);
         var estResponse = this.gateway.salvar(estabelecimento);
         return new EstabelecimentoResponse(estResponse.id());
@@ -140,6 +139,7 @@ public class EstabelecimentoUseCase {
     }
 
     private void validarEndereco(Endereco endereco) {
+        validarCamposEndereco(endereco);
         validarCidade(endereco.cidade());
         validarEstado(endereco.estado());
         validarBairro(endereco.bairro());

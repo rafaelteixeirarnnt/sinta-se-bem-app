@@ -4,7 +4,6 @@ import br.com.leaf.sintasebemapp.application.exception.NegocioException;
 import br.com.leaf.sintasebemapp.domain.models.Endereco;
 import br.com.leaf.sintasebemapp.domain.models.Usuario;
 import br.com.leaf.sintasebemapp.gateway.UsuarioRepositoryGateway;
-import br.com.leaf.sintasebemapp.infra.mapper.UsuarioMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mapstruct.factory.Mappers.getMapper;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,8 +31,6 @@ public class UsuarioUseCaseTest {
 
     @Mock
     private UsuarioRepositoryGateway gateway;
-
-    private final UsuarioMapper usuarioMapper = getMapper(UsuarioMapper.class);
 
     private Usuario usuario;
 

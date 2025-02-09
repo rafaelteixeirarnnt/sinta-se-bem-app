@@ -5,9 +5,6 @@ import br.com.leaf.sintasebemapp.domain.models.Endereco;
 import br.com.leaf.sintasebemapp.domain.models.Estabelecimento;
 import br.com.leaf.sintasebemapp.domain.models.Usuario;
 import br.com.leaf.sintasebemapp.gateway.EstabelecimentoRepositoryGateway;
-import br.com.leaf.sintasebemapp.infra.persistence.jpa.entity.EnderecosEntity;
-import br.com.leaf.sintasebemapp.infra.persistence.jpa.entity.PerfisEntity;
-import br.com.leaf.sintasebemapp.infra.persistence.jpa.entity.UsuariosEntity;
 import br.com.leaf.sintasebemapp.infra.persistence.jpa.repository.EstabelecimentoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -17,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 

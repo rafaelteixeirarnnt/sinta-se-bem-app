@@ -38,7 +38,12 @@ public class EstabelecimentoRepositoryJpaGateway implements EstabelecimentoRepos
 
     @Override
     public Estabelecimento obterEstabelecimentoPorCNPJ(String cnpj) {
-        var estabelecimento = this.repository.findByCnpj(cnpj).orElseThrow(() -> new EstabelecimentoValidationException("Estabelecimento não encontrado"));
+        var estabelecimento = this.repository.findByCnpj(cnpj).orElse(null);
+
+        if (estabelecimento == null) {
+            return null;
+        }
+
         return this.mapper.toEstabelecimento(estabelecimento);
     }
 }

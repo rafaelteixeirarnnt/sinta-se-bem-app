@@ -23,8 +23,9 @@ import java.util.UUID;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_XML;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class EstabelecimentoControllerTest {
@@ -63,9 +64,36 @@ public class EstabelecimentoControllerTest {
             when(service.salvar(any(EstabelecimentoRequest.class))).thenAnswer(i -> response);
 
             mockMvc.perform(MockMvcRequestBuilders.post("/v1/estabelecimentos")
-                            .contentType(APPLICATION_JSON)
-                            .content(asJsonString(request))
-                    ).andExpect(status().isCreated());
+                    .contentType(APPLICATION_JSON)
+                    .content(asJsonString(request))
+            ).andExpect(status().isCreated());
+
+            verify(service, times(1)).salvar(any(EstabelecimentoRequest.class));
+        }
+
+        @Test
+        void deveGerarExcecao_QuandoPayloadForXML() throws Exception {
+
+            var xml = "<estabelecimentoRequest>\n" +
+                    "    <cnpj>68642960000199</cnpj>\n" +
+                    "    <nome>nome</nome>\n" +
+                    "    <cpfResponsavel>12345678901</cpfResponsavel>\n" +
+                    "    <telefoneResponsavel>12345678901</telefoneResponsavel>\n" +
+                    "    <cidade>cidade</cidade>\n" +
+                    "    <estado>DF</estado>\n" +
+                    "    <bairro>bairro</bairro>\n" +
+                    "    <cep>71920890</cep>\n" +
+                    "    <logradouro>logradouro</logradouro>\n" +
+                    "    <numero>numero</numero>\n" +
+                    "    <complemento>complemento</complemento>\n" +
+                    "</estabelecimentoRequest>";
+
+            mockMvc.perform(MockMvcRequestBuilders.post("/v1/estabelecimentos")
+                    .contentType(APPLICATION_XML)
+                    .content(asJsonString(xml))
+            ).andExpect(status().isUnsupportedMediaType());
+
+            verify(service, never()).salvar(any(EstabelecimentoRequest.class));
         }
 
     }

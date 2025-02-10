@@ -21,8 +21,9 @@ import java.util.UUID;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_XML;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,7 +67,27 @@ public class UsuariosControllerTest {
                     .contentType(APPLICATION_JSON)
                     .content(asJsonString(request))
             ).andExpect(status().isCreated());
+
+            verify(service, times(1)).salvar(any(UsuarioRequest.class));
         }
+
+        @Test
+        void deveGerarExcecao_QuandoPayloadForXML() throws Exception {
+
+            var xml = "<usuarioRequest>\n" +
+                    "    <nome>Rafael</nome>\n" +
+                    "    <email>r@R.com</email>\n" +
+                    "    <dataNascimento>2000-01-01</dataNascimento>\n" +
+                    "</usuarioRequest>";
+
+            mockMvc.perform(post("/v1/usuarios")
+                    .contentType(APPLICATION_XML)
+                    .content(xml)
+            ).andExpect(status().isUnsupportedMediaType());
+
+            verify(service, never()).salvar(any(UsuarioRequest.class));
+        }
+
     }
 
     private static String asJsonString(final Object obj) throws JsonProcessingException {

@@ -9,5 +9,3 @@ spring:
     password: ${DATABASE_PASSWORD}
   liquibase:
     change-log: db/changelog/changelog-master.xml
-#springdoc:
-#  override-with-generic-response: false

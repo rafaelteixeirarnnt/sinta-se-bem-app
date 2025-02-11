@@ -28,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_XML;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class EstabelecimentoControllerTest {
+public class EstabelecimentoControllerIT {
 
     @Mock
     private EstabelecimentoService service;

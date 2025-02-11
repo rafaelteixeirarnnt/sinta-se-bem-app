@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class UsuariosControllerTest {
+public class UsuariosControllerIT {
 
     private MockMvc mockMvc;
 

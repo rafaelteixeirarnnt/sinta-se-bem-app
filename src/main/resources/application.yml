@@ -8,4 +8,5 @@ spring:
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
   liquibase:
+    enabled: false
     change-log: db/changelog/changelog-master.xml

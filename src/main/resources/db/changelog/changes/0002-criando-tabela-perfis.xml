@@ -16,9 +16,9 @@
 
 
         <sql dbms="postgresql" endDelimiter=";">
-            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('d3014683-dc03-4905-ad51-3e4c561f0649', 'CLIENTE');
-            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('da6d737a-13cb-4308-b6c0-08ea581d193c', 'PRESTADOR');
-            insert into app.sinta_se_bem.tb_perfis (id, tx_descricao) values ('40d0fa19-5aab-485f-b73a-2e11edd8ffd2', 'ADMINISTRADOR');
+            insert into ${DATABASE}.sinta_se_bem.tb_perfis (id, tx_descricao) values ('d3014683-dc03-4905-ad51-3e4c561f0649', 'CLIENTE');
+            insert into ${DATABASE}.sinta_se_bem.tb_perfis (id, tx_descricao) values ('da6d737a-13cb-4308-b6c0-08ea581d193c', 'PRESTADOR');
+            insert into ${DATABASE}.sinta_se_bem.tb_perfis (id, tx_descricao) values ('40d0fa19-5aab-485f-b73a-2e11edd8ffd2', 'ADMINISTRADOR');
         </sql>
     </changeSet>
 

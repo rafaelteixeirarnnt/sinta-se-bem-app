@@ -1,9 +1,10 @@
 package br.com.leaf.sintasebemapp.infra.controller;
 
 
+import br.com.leaf.sintasebemapp.application.usecases.UsuarioUseCase;
+import br.com.leaf.sintasebemapp.domain.models.Usuario;
 import br.com.leaf.sintasebemapp.infra.dto.request.UsuarioRequest;
 import br.com.leaf.sintasebemapp.infra.dto.response.UsuarioResponse;
-import br.com.leaf.sintasebemapp.infra.services.UsuarioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -33,7 +34,7 @@ public class UsuariosControllerIT {
     private MockMvc mockMvc;
 
     @Mock
-    private UsuarioService service;
+    private UsuarioUseCase service;
 
     private AutoCloseable mock;
 
@@ -61,14 +62,14 @@ public class UsuariosControllerIT {
                     "Aa1234567_", "12345678909", "11999999999", "São Paulo", "SP", "Pinheiros", "71910000", "Rua 25 Sul",
                     "123", null, false);
 
-            when(service.salvar(any(UsuarioRequest.class))).thenAnswer(i -> response);
+            when(service.salvar(any(Usuario.class))).thenAnswer(i -> response);
 
             mockMvc.perform(post("/v1/usuarios")
                     .contentType(APPLICATION_JSON)
                     .content(asJsonString(request))
             ).andExpect(status().isCreated());
 
-            verify(service, times(1)).salvar(any(UsuarioRequest.class));
+            verify(service, times(1)).salvar(any(Usuario.class));
         }
 
         @Test
@@ -85,7 +86,7 @@ public class UsuariosControllerIT {
                     .content(xml)
             ).andExpect(status().isUnsupportedMediaType());
 
-            verify(service, never()).salvar(any(UsuarioRequest.class));
+            verify(service, never()).salvar(any(Usuario.class));
         }
 
     }

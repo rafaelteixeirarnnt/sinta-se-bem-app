@@ -1,9 +1,10 @@
 package br.com.leaf.sintasebemapp.infra.controller;
 
+import br.com.leaf.sintasebemapp.application.usecases.EstabelecimentoUseCase;
 import br.com.leaf.sintasebemapp.domain.enums.DiaSemanaEnum;
+import br.com.leaf.sintasebemapp.domain.models.Estabelecimento;
 import br.com.leaf.sintasebemapp.infra.dto.request.EstabelecimentoRequest;
 import br.com.leaf.sintasebemapp.infra.dto.response.EstabelecimentoResponse;
-import br.com.leaf.sintasebemapp.infra.services.EstabelecimentoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EstabelecimentoControllerIT {
 
     @Mock
-    private EstabelecimentoService service;
+    private EstabelecimentoUseCase service;
 
     private AutoCloseable mock;
 
@@ -61,14 +62,14 @@ public class EstabelecimentoControllerIT {
                     "logradouro", "numero", "complemento", "e@e.com",
                     LocalTime.of(9, 0), LocalTime.of(20, 0), Arrays.asList(DiaSemanaEnum.SEGUNDA, DiaSemanaEnum.TERCA));
 
-            when(service.salvar(any(EstabelecimentoRequest.class))).thenAnswer(i -> response);
+            when(service.salvar(any(Estabelecimento.class))).thenAnswer(i -> response);
 
             mockMvc.perform(MockMvcRequestBuilders.post("/v1/estabelecimentos")
                     .contentType(APPLICATION_JSON)
                     .content(asJsonString(request))
             ).andExpect(status().isCreated());
 
-            verify(service, times(1)).salvar(any(EstabelecimentoRequest.class));
+            verify(service, times(1)).salvar(any(Estabelecimento.class));
         }
 
         @Test
@@ -93,7 +94,7 @@ public class EstabelecimentoControllerIT {
                     .content(asJsonString(xml))
             ).andExpect(status().isUnsupportedMediaType());
 
-            verify(service, never()).salvar(any(EstabelecimentoRequest.class));
+            verify(service, never()).salvar(any(Estabelecimento.class));
         }
 
     }

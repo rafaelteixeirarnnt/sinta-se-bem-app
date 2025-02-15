@@ -33,8 +33,11 @@ public class UsuariosController {
             description = "Cadastra um novo usuário com seus dados pessoais e endereço",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                    @ApiResponse(
+                            responseCode = "500",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)),
+                            description = "Erro interno no servidor"
+                    )
             })
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest request) {

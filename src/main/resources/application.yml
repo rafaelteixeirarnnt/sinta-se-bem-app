@@ -8,6 +8,6 @@ spring:
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
   liquibase:
-    enabled: false
+    enabled: true
     change-log: db/changelog/changelog-master.xml
     default-schema: public

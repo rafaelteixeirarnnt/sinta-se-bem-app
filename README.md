@@ -65,6 +65,15 @@ Certifique-se de ter os seguintes requisitos instalados:
    ```
 
 2. Configure as variáveis de ambiente no arquivo `application.yaml`.
+   - 2.1. 📌 Configuração das Variáveis de Ambiente.  
+   Antes de rodar a aplicação, defina as seguintes variáveis de ambiente:
+
+```plaintext
+DATABASE_USER=postgres -- Usuário do banco
+DATABASE_PASSWORD=postgres -- Senha do banco
+DATABASE=app -- Database (Precisa ser criado antes de iniciar o projeto)
+DATABASE_URL=jdbc:postgresql://localhost:5432/app -- URL do banco (Troca {app} pelo nome escolhido para o database)
+```
 
 3. Suba os containers necessários com **Docker Compose**:
    ```sh

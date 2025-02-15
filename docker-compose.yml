@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    image: sinta-se-bem-app:latest
+    build: .
+    container_name: sinta-se-bem-app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/app
+      SPRING_LIQUIBASE_ENABLED: "true"
+      DATABASE: app
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  db:
+    image: postgres:14-alpine
+    container_name: sinta-se-bem-db
+    restart: always
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d app" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
